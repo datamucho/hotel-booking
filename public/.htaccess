@@ -5,16 +5,27 @@
 
     RewriteEngine On
 
+    # Handle broken pipe errors
+    php_value output_buffering Off
+    php_value max_execution_time 300
+    php_value max_input_time 300
+    php_value ignore_user_abort On
+    php_value memory_limit 256M
+
+    # Prevent Apache from throwing 'Broken Pipe' errors
+    SetEnv no-gzip 1
+    SetEnv dont-vary 1
+
     # Handle Authorization Header
     RewriteCond %{HTTP:Authorization} .
     RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
 
-    # Redirect Trailing Slashes If Not A Folder...
+    # Redirect Trailing Slashes...
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteCond %{REQUEST_URI} (.+)/$
     RewriteRule ^ %1 [L,R=301]
 
-    # Send Requests To Front Controller...
+    # Handle Front Controller...
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteRule ^ index.php [L]

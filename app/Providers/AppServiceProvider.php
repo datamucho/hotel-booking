@@ -19,6 +19,13 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        // Prevent broken pipe errors
+        ignore_user_abort(true);
+        set_time_limit(0);
+        
+        // Disable output buffering
+        if (ob_get_level()) {
+            ob_end_clean();
+        }
     }
 }
