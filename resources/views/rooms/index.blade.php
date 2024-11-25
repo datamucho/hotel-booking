@@ -145,10 +145,10 @@
                                         <span class="text-gray-600">/night</span>
                                     </div>
                                     @if($room->availability_status)
-                                        <button 
-                                            class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700">
+                                        <a href="{{ route('bookings.create', $room) }}" 
+                                           class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700">
                                             Book Now
-                                        </button>
+                                        </a>
                                     @else
                                         <span class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-gray-400 cursor-not-allowed">
                                             Not Available
