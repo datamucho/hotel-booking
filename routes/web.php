@@ -4,6 +4,7 @@ use App\Http\Controllers\RoomController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\BookingController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -12,6 +13,11 @@ Route::get('/', function () {
 Route::get('/rooms', [RoomController::class, 'index'])->name('rooms.index');
 
 Route::get('/rooms/{room}', [RoomController::class, 'show'])->name('rooms.show');
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('/rooms/{room}/book', [BookingController::class, 'create'])->name('bookings.create');
+    Route::post('/rooms/{room}/book', [BookingController::class, 'store'])->name('bookings.store');
+});
 
 // Auth Routes
 Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
