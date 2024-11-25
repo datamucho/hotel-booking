@@ -46,6 +46,9 @@
                     <div class="ml-10 flex items-center space-x-8">
                         <a href="/" class="nav-link text-gray-700 hover:text-gray-900 font-medium transition-colors">Home</a>
                         <a href="/rooms" class="nav-link text-gray-700 hover:text-gray-900 font-medium transition-colors">Rooms</a>
+                        <a href="{{ route('bookings.index') }}" class="text-gray-600 hover:text-gray-900">
+                            My Bookings
+                        </a>
                     </div>
                 </div>
                 <div class="flex items-center space-x-4">
@@ -72,6 +75,21 @@
 
     <!-- Main Content with padding for fixed header -->
     <main class="pt-20">
+        @if(session('success'))
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-4">
+                <div class="bg-green-50 border border-green-200 text-green-800 rounded-md p-4">
+                    {{ session('success') }}
+                </div>
+            </div>
+        @endif
+
+        @if(session('error'))
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-4">
+                <div class="bg-red-50 border border-red-200 text-red-800 rounded-md p-4">
+                    {{ session('error') }}
+                </div>
+            </div>
+        @endif
         @yield('content')
     </main>
 
