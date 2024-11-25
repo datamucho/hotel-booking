@@ -25,7 +25,7 @@ class BookingController extends Controller
 
         $booking = Booking::create([
             'user_id' => Auth::id(),
-            'room_id' => $room->id,
+            'room_id' => $room->room_id,
             'check_in' => $validated['check_in'],
             'check_out' => $validated['check_out'],
             'guests' => $validated['guests'],
@@ -37,5 +37,25 @@ class BookingController extends Controller
 
         return redirect()->route('bookings.confirmation', $booking)
             ->with('success', 'Your booking has been submitted successfully!');
+    }
+
+    public function confirmation(Booking $booking)
+    {
+        // Ensure users can only see their own bookings
+        if ($booking->user_id !== Auth::id()) {
+            abort(403);
+        }
+
+        return view('bookings.confirmation', compact('booking'));
+    }
+
+    public function index()
+    {
+        $bookings = Booking::with('room')
+            ->where('user_id', Auth::id())
+            ->orderBy('created_at', 'desc')
+            ->paginate(10);
+
+        return view('bookings.index', compact('bookings'));
     }
 } 

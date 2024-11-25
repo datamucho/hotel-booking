@@ -12,6 +12,8 @@ class Room extends Model
         'room_type',
         'price_per_night',
         'availability_status',
-        'floor_number'
+        'floor_number',
+        'max_guests',
+        'description'
     ];
 }
