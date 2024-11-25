@@ -58,4 +58,20 @@ class BookingController extends Controller
 
         return view('bookings.index', compact('bookings'));
     }
+
+    public function destroy(Booking $booking)
+    {
+        if ($booking->user_id !== Auth::id()) {
+            abort(403);
+        }
+
+        if (!in_array($booking->status, ['pending', 'confirmed'])) {
+            return back()->with('error', 'This booking cannot be cancelled.');
+        }
+
+        $booking->update(['status' => 'cancelled']);
+
+        return redirect()->route('bookings.index')
+            ->with('success', 'Booking cancelled successfully.');
+    }
 } 
