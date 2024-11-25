@@ -46,6 +46,18 @@
                                             {{ ucfirst($booking->status) }}
                                         </span>
                                     </span>
+                                    
+                                    @if(in_array($booking->status, ['pending', 'confirmed']))
+                                        <form action="{{ route('bookings.destroy', $booking) }}" method="POST" class="ml-3">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" 
+                                                    onclick="return confirm('Are you sure you want to cancel this booking?')"
+                                                    class="inline-flex items-center px-3 py-1 border border-transparent text-sm font-medium rounded-md text-white bg-red-600 hover:bg-red-700">
+                                                Cancel Booking
+                                            </button>
+                                        </form>
+                                    @endif
                                 </div>
                             </div>
                             <div class="mt-4 border-t border-gray-200 pt-4">
