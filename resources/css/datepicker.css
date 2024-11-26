@@ -1,0 +1,20 @@
+/* Custom styles for the date picker */
+.flatpickr-calendar {
+    @apply shadow-lg border border-gray-100 rounded-lg;
+}
+
+.flatpickr-day.selected {
+    @apply bg-blue-600 border-blue-600;
+}
+
+.flatpickr-day.selected:hover {
+    @apply bg-blue-700 border-blue-700;
+}
+
+.flatpickr-day:hover {
+    @apply bg-blue-50;
+}
+
+.flatpickr-day.today {
+    @apply border-blue-200;
+}
