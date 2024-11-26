@@ -25,35 +25,46 @@
                 </div>
                 
                 <!-- Search Component -->
-                <div class="mt-10 bg-white/95 backdrop-blur-lg rounded-2xl shadow-xl p-6 max-w-4xl transform transition-all duration-300 hover:scale-[1.02]">
+                <form action="{{ route('rooms.index') }}" method="GET" class="mt-10 bg-white/95 backdrop-blur-lg rounded-2xl shadow-xl p-6 max-w-4xl transform transition-all duration-300 hover:scale-[1.02]">
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                         <div class="space-y-2">
-                            <label class="block text-sm font-medium text-gray-700">Check In</label>
-                            <div class="relative">
-                                <input type="date" 
-                                       class="w-full rounded-lg border-gray-200 focus:ring-blue-500 focus:border-blue-500 pl-4 pr-10 py-3"
-                                >
-                            </div>
+                            <x-date-picker 
+                                name="check_in" 
+                                label="Check In" 
+                                placeholder="Select check-in date"
+                                :min-date="date('Y-m-d')"
+                                required
+                            />
                         </div>
                         <div class="space-y-2">
-                            <label class="block text-sm font-medium text-gray-700">Check Out</label>
-                            <div class="relative">
-                                <input type="date" 
-                                       class="w-full rounded-lg border-gray-200 focus:ring-blue-500 focus:border-blue-500 pl-4 pr-10 py-3"
-                                >
-                            </div>
+                            <x-date-picker 
+                                name="check_out" 
+                                label="Check Out" 
+                                placeholder="Select check-out date"
+                                :min-date="date('Y-m-d', strtotime('+1 day'))"
+                                required
+                            />
                         </div>
                         <div class="space-y-2">
                             <label class="block text-sm font-medium text-gray-700">Guests</label>
-                            <button class="w-full bg-blue-600 text-white py-3 px-4 rounded-lg hover:bg-blue-700 transition-colors duration-300 flex items-center justify-center space-x-2">
-                                <span>Search Rooms</span>
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                                    <path fill-rule="evenodd" d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd" />
-                                </svg>
-                            </button>
+                            <div class="relative">
+                                <select name="guests" 
+                                        class="w-full rounded-lg border border-gray-300 bg-white px-4 py-3 appearance-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:ring-opacity-20">
+                                    @for($i = 1; $i <= 6; $i++)
+                                        <option value="{{ $i }}">{{ $i }} {{ $i === 1 ? 'Guest' : 'Guests' }}</option>
+                                    @endfor
+                                </select>
+                                <button type="submit" 
+                                        class="absolute inset-y-0 right-0 flex items-center px-4 text-white bg-blue-600 rounded-r-lg hover:bg-blue-700 transition-colors">
+                                    <span class="hidden md:block mr-2">Search</span>
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                        <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd" />
+                                    </svg>
+                                </button>
+                            </div>
                         </div>
                     </div>
-                </div>
+                </form>
             </div>
         </div>
     </div>

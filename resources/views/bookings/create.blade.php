@@ -28,28 +28,26 @@
             <form action="{{ route('bookings.store', $room) }}" method="POST" class="space-y-6">
                 @csrf
                 <div>
-                    <label class="block text-sm font-medium text-gray-700">Check In</label>
-                    <input type="date" 
-                           name="check_in"
-                           value="{{ old('check_in') }}"
-                           min="{{ date('Y-m-d') }}"
-                           class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-                           required
-                    >
+                    <x-date-picker 
+                        name="check_in" 
+                        label="Check In" 
+                        placeholder="Select check-in date"
+                        :min-date="date('Y-m-d')"
+                        required
+                    />
                     @error('check_in')
                         <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                     @enderror
                 </div>
 
                 <div>
-                    <label class="block text-sm font-medium text-gray-700">Check Out</label>
-                    <input type="date" 
-                           name="check_out"
-                           value="{{ old('check_out') }}"
-                           min="{{ date('Y-m-d', strtotime('+1 day')) }}"
-                           class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-                           required
-                    >
+                    <x-date-picker 
+                        name="check_out" 
+                        label="Check Out" 
+                        placeholder="Select check-out date"
+                        :min-date="date('Y-m-d', strtotime('+1 day'))"
+                        required
+                    />
                     @error('check_out')
                         <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                     @enderror

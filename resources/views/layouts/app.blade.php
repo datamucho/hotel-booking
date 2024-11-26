@@ -7,6 +7,10 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/themes/airbnb.css">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script defer src="{{ asset('js/datepicker.js') }}"></script>
     <style>
         .nav-link {
             position: relative;
@@ -23,6 +27,79 @@
         }
         .nav-link:hover::after {
             width: 100%;
+        }
+        .flatpickr-calendar {
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+            border: 1px solid #f3f4f6;
+            border-radius: 0.5rem;
+        }
+
+        .flatpickr-day.selected {
+            background: #2563eb;
+            border-color: #2563eb;
+        }
+
+        .flatpickr-day.selected:hover {
+            background: #1d4ed8;
+            border-color: #1d4ed8;
+        }
+
+        .flatpickr-day:hover {
+            background: #eff6ff;
+        }
+
+        .flatpickr-day.today {
+            border-color: #bfdbfe;
+        }
+
+        /* Custom styles for the date picker */
+        .flatpickr-calendar {
+            @apply shadow-lg border border-gray-100 rounded-lg;
+            background: white;
+            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+        }
+
+        .flatpickr-day {
+            @apply rounded-md border-0;
+        }
+
+        .flatpickr-day.selected {
+            background: #2563eb !important;
+            border-color: #2563eb !important;
+        }
+
+        .flatpickr-day.selected:hover {
+            background: #1d4ed8 !important;
+            border-color: #1d4ed8 !important;
+        }
+
+        .flatpickr-day:hover {
+            background: #eff6ff !important;
+        }
+
+        .flatpickr-day.today {
+            border: 1px solid #bfdbfe !important;
+            background: #eff6ff !important;
+        }
+
+        .flatpickr-months {
+            @apply p-2;
+        }
+
+        .flatpickr-current-month {
+            @apply font-semibold;
+        }
+
+        .flatpickr-weekday {
+            @apply font-medium text-gray-600;
+        }
+
+        .flatpickr-monthSelect-month {
+            @apply p-2 rounded-md hover:bg-blue-50;
+        }
+
+        .flatpickr-monthSelect-month.selected {
+            @apply bg-blue-500 text-white;
         }
     </style>
 </head>
