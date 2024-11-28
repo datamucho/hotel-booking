@@ -58,6 +58,12 @@
                                             </button>
                                         </form>
                                     @endif
+                                    @if($booking->status === 'pending' && !$booking->payment)
+                                        <a href="{{ route('payments.create', $booking) }}"
+                                           class="inline-flex items-center px-3 py-1 border border-transparent text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700 ml-3">
+                                            Process Payment
+                                        </a>
+                                    @endif
                                 </div>
                             </div>
                             <div class="mt-4 border-t border-gray-200 pt-4">

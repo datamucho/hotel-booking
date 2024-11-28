@@ -14,18 +14,26 @@
     <style>
         .nav-link {
             position: relative;
+            padding-bottom: 2px;
         }
         .nav-link::after {
             content: '';
             position: absolute;
             width: 0;
             height: 2px;
-            bottom: -4px;
-            left: 0;
+            bottom: -2px;
+            left: 50%;
             background-color: #2563eb;
-            transition: width 0.3s ease;
+            transition: all 0.3s ease;
+            transform: translateX(-50%);
         }
         .nav-link:hover::after {
+            width: 100%;
+        }
+        .nav-link.active {
+            color: #2563eb;
+        }
+        .nav-link.active::after {
             width: 100%;
         }
         .flatpickr-calendar {
@@ -52,7 +60,6 @@
             border-color: #bfdbfe;
         }
 
-        /* Custom styles for the date picker */
         .flatpickr-calendar {
             @apply shadow-lg border border-gray-100 rounded-lg;
             background: white;
@@ -101,6 +108,80 @@
         .flatpickr-monthSelect-month.selected {
             @apply bg-blue-500 text-white;
         }
+
+        /* Improved mobile menu animation */
+        .mobile-menu-enter {
+            opacity: 0;
+            transform: translateY(-10px);
+        }
+
+        .mobile-menu-enter-active {
+            opacity: 1;
+            transform: translateY(0);
+            transition: opacity 0.2s ease, transform 0.2s ease;
+        }
+
+        .mobile-menu-exit {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .mobile-menu-exit-active {
+            opacity: 0;
+            transform: translateY(-10px);
+            transition: opacity 0.15s ease, transform 0.15s ease;
+        }
+
+        /* Improved header backdrop */
+        .header-backdrop {
+            backdrop-filter: blur(8px);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .nav-dropdown-enter {
+            opacity: 0;
+            transform: scale(0.95);
+        }
+
+        .nav-dropdown-enter-active {
+            opacity: 1;
+            transform: scale(1);
+            transition: opacity 0.1s ease-out, transform 0.1s ease-out;
+        }
+
+        .nav-dropdown-exit {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .nav-dropdown-exit-active {
+            opacity: 0;
+            transform: scale(0.95);
+            transition: opacity 0.075s ease-in, transform 0.075s ease-in;
+        }
+
+        .header-backdrop {
+            @apply bg-white/90 backdrop-blur-md;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.05);
+        }
+
+        .nav-link {
+            @apply relative py-2 px-1;
+        }
+
+        .nav-link::after {
+            content: '';
+            @apply absolute bottom-0 left-0 w-0 h-0.5 bg-blue-600 transition-all duration-300;
+        }
+
+        .nav-link:hover::after,
+        .nav-link.active::after {
+            @apply w-full;
+        }
+
+        .nav-link.active {
+            @apply text-blue-600;
+        }
     </style>
 </head>
 <body class="bg-gray-50 font-sans">
@@ -110,14 +191,17 @@
         isMobileMenuOpen: false 
     }" 
     @scroll.window="isScrolled = window.pageYOffset > 20"
-    :class="{ 'bg-white/80 backdrop-blur-md shadow-md': isScrolled || isMobileMenuOpen, 'bg-transparent': !isScrolled && !isMobileMenuOpen }"
+    :class="{ 
+        'header-backdrop bg-white/90 shadow-lg': isScrolled || isMobileMenuOpen, 
+        'bg-transparent': !isScrolled && !isMobileMenuOpen 
+    }"
     class="fixed w-full top-0 z-50 transition-all duration-300">
         <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between h-20">
                 <!-- Logo -->
                 <div class="flex items-center">
-                    <a href="/" class="flex items-center space-x-2">
-                        <svg class="w-8 h-8 text-blue-600" fill="currentColor" viewBox="0 0 24 24">
+                    <a href="/" class="flex items-center space-x-2 group">
+                        <svg class="w-8 h-8 text-blue-600 transition-transform duration-300 group-hover:scale-110" fill="currentColor" viewBox="0 0 24 24">
                             <!-- Your logo SVG -->
                         </svg>
                         <span class="text-2xl font-bold bg-gradient-to-r from-blue-600 to-blue-800 bg-clip-text text-transparent">
@@ -128,31 +212,65 @@
 
                 <!-- Desktop Navigation -->
                 <div class="hidden md:flex md:items-center md:space-x-8">
-                    <a href="/" class="nav-link text-gray-700 hover:text-gray-900 font-medium transition-colors">Home</a>
-                    <a href="/rooms" class="nav-link text-gray-700 hover:text-gray-900 font-medium transition-colors">Rooms</a>
-                    <a href="{{ route('bookings.index') }}" class="nav-link text-gray-700 hover:text-gray-900 font-medium transition-colors">My Bookings</a>
+                    <a href="/" class="nav-link text-gray-700 hover:text-gray-900 font-medium transition-colors {{ request()->is('/') ? 'active' : '' }}">Home</a>
+                    <a href="/rooms" class="nav-link text-gray-700 hover:text-gray-900 font-medium transition-colors {{ request()->is('rooms*') ? 'active' : '' }}">Rooms</a>
+                    <a href="{{ route('bookings.index') }}" class="nav-link text-gray-700 hover:text-gray-900 font-medium transition-colors {{ request()->is('bookings*') ? 'active' : '' }}">My Bookings</a>
                     
                     @auth
-                        <span class="text-gray-700">Welcome, {{ Auth::user()->name }}</span>
-                        <form method="POST" action="{{ route('logout') }}" class="inline">
-                            @csrf
-                            <button type="submit" class="px-4 py-2 rounded-full text-gray-700 hover:bg-gray-100 transition-colors">
-                                Logout
-                            </button>
-                        </form>
+                        <div class="flex items-center pl-6 ml-6 border-l border-gray-200">
+                            <div class="relative" x-data="{ isOpen: false }">
+                                <button @click="isOpen = !isOpen" 
+                                        class="flex items-center space-x-3 text-gray-700 hover:text-gray-900 focus:outline-none group">
+                                    <div class="flex items-center space-x-3">
+                                        <div class="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center">
+                                            <span class="text-blue-600 font-medium">{{ substr(Auth::user()->name, 0, 1) }}</span>
+                                        </div>
+                                        <span class="font-medium group-hover:text-blue-600 transition-colors">{{ Auth::user()->name }}</span>
+                                    </div>
+                                    <svg class="w-4 h-4 transition-transform duration-200" 
+                                         :class="{ 'rotate-180': isOpen }"
+                                         fill="none" 
+                                         stroke="currentColor" 
+                                         viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                                    </svg>
+                                </button>
+                                
+                                <!-- Dropdown menu -->
+                                <div x-show="isOpen" 
+                                     @click.away="isOpen = false"
+                                     x-transition:enter="transition ease-out duration-100"
+                                     x-transition:enter-start="transform opacity-0 scale-95"
+                                     x-transition:enter-end="transform opacity-100 scale-100"
+                                     x-transition:leave="transition ease-in duration-75"
+                                     x-transition:leave-start="transform opacity-100 scale-100"
+                                     x-transition:leave-end="transform opacity-0 scale-95"
+                                     class="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg py-1 border border-gray-100">
+                                    <form method="POST" action="{{ route('logout') }}">
+                                        @csrf
+                                        <button type="submit" class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-blue-600 transition-colors">
+                                            Sign Out
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
                     @else
-                        <a href="{{ route('login') }}" class="px-4 py-2 rounded-full text-gray-700 hover:bg-gray-100 transition-colors">
-                            Login
-                        </a>
-                        <a href="{{ route('register') }}" class="px-4 py-2 rounded-full bg-blue-600 text-white hover:bg-blue-700 transition-colors">
-                            Sign Up
-                        </a>
+                        <div class="flex items-center space-x-4 pl-6 ml-6 border-l border-gray-200">
+                            <a href="{{ route('login') }}" class="text-gray-700 hover:text-gray-900 font-medium transition-colors">
+                                Sign In
+                            </a>
+                            <a href="{{ route('register') }}" class="px-4 py-2 rounded-full bg-blue-600 text-white hover:bg-blue-700 transition-all duration-300 hover:shadow-md hover:scale-105">
+                                Sign Up
+                            </a>
+                        </div>
                     @endauth
                 </div>
 
                 <!-- Mobile menu button -->
                 <div class="flex items-center md:hidden">
-                    <button @click="isMobileMenuOpen = !isMobileMenuOpen" class="text-gray-700 hover:text-gray-900">
+                    <button @click="isMobileMenuOpen = !isMobileMenuOpen" 
+                            class="text-gray-700 hover:text-gray-900 transition-colors p-2 rounded-lg hover:bg-gray-100">
                         <svg x-show="!isMobileMenuOpen" class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
                         </svg>
@@ -165,29 +283,27 @@
 
             <!-- Mobile Navigation -->
             <div x-show="isMobileMenuOpen" 
-                 x-transition:enter="transition ease-out duration-200"
-                 x-transition:enter-start="opacity-0 -translate-y-1"
-                 x-transition:enter-end="opacity-100 translate-y-0"
-                 x-transition:leave="transition ease-in duration-150"
-                 x-transition:leave-start="opacity-100 translate-y-0"
-                 x-transition:leave-end="opacity-0 -translate-y-1"
+                 x-transition:enter="mobile-menu-enter"
+                 x-transition:enter-active="mobile-menu-enter-active"
+                 x-transition:leave="mobile-menu-exit"
+                 x-transition:leave-active="mobile-menu-exit-active"
                  class="md:hidden">
-                <div class="px-2 pt-2 pb-3 space-y-1">
-                    <a href="/" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50">Home</a>
-                    <a href="/rooms" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50">Rooms</a>
-                    <a href="{{ route('bookings.index') }}" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50">My Bookings</a>
+                <div class="px-2 pt-2 pb-3 space-y-1 bg-white rounded-lg shadow-lg mt-2">
+                    <a href="/" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-blue-50 transition-colors {{ request()->is('/') ? 'text-blue-600 bg-blue-50' : '' }}">Home</a>
+                    <a href="/rooms" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-blue-50 transition-colors {{ request()->is('rooms*') ? 'text-blue-600 bg-blue-50' : '' }}">Rooms</a>
+                    <a href="{{ route('bookings.index') }}" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-blue-50 transition-colors {{ request()->is('bookings*') ? 'text-blue-600 bg-blue-50' : '' }}">My Bookings</a>
                     
                     @auth
                         <span class="block px-3 py-2 text-base font-medium text-gray-700">Welcome, {{ Auth::user()->name }}</span>
                         <form method="POST" action="{{ route('logout') }}">
                             @csrf
-                            <button type="submit" class="block w-full text-left px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50">
+                            <button type="submit" class="block w-full text-left px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-blue-50 transition-colors">
                                 Logout
                             </button>
                         </form>
                     @else
-                        <a href="{{ route('login') }}" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50">Login</a>
-                        <a href="{{ route('register') }}" class="block px-3 py-2 rounded-md text-base font-medium text-white bg-blue-600 hover:bg-blue-700">Sign Up</a>
+                        <a href="{{ route('login') }}" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-blue-50 transition-colors">Login</a>
+                        <a href="{{ route('register') }}" class="block px-3 py-2 rounded-md text-base font-medium text-white bg-blue-600 hover:bg-blue-700 transition-colors">Sign Up</a>
                     @endauth
                 </div>
             </div>

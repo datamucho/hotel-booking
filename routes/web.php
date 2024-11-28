@@ -9,3 +9,4 @@ Route::get('/', function () {
 require __DIR__.'/web/auth.php';
 require __DIR__.'/web/rooms.php';
 require __DIR__.'/web/bookings.php';
+require __DIR__.'/web/payments.php';
