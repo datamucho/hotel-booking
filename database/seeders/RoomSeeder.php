@@ -17,9 +17,11 @@ class RoomSeeder extends Seeder
         for ($i = 0; $i < 15; $i++) {
             DB::table('rooms')->insert([
                 'room_type' => $faker->randomElement($roomTypes),
+                'description' => $faker->paragraph(2),
                 'price_per_night' => $faker->randomFloat(2, 50, 500),
                 'availability_status' => $faker->randomElement($statuses),
                 'floor_number' => $faker->numberBetween(1, 5),
+                'max_guests' => $faker->numberBetween(1, 4),
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);

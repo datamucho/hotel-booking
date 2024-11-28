@@ -16,4 +16,9 @@ class Room extends Model
         'max_guests',
         'description'
     ];
+
+    public function bookings()
+    {
+        return $this->hasMany(Booking::class);
+    }
 }

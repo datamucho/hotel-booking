@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Book Room - LuxStay')
+@section('title', 'Book Room - Harbour')
 
 @section('content')
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
@@ -12,12 +12,30 @@
                  class="w-full h-64 object-cover rounded-lg"
                  onerror="this.src='https://images.unsplash.com/photo-1590490360182-c33d57733427?ixlib=rb-4.0.3'"
             >
-            <div class="mt-6">
-                <h2 class="text-2xl font-bold text-gray-900">{{ ucwords(str_replace('_', ' ', $room->room_type)) }}</h2>
-                <p class="mt-2 text-gray-600">{{ $room->description }}</p>
-                <div class="mt-4">
-                    <span class="text-2xl font-bold text-blue-600">${{ number_format($room->price_per_night) }}</span>
-                    <span class="text-gray-600">/night</span>
+            <div class="mt-6 space-y-6">
+                <div>
+                    <h2 class="text-2xl font-bold text-gray-900">{{ ucwords(str_replace('_', ' ', $room->room_type)) }}</h2>
+                    <p class="mt-2 text-gray-600">{{ $room->description }}</p>
+                </div>
+
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="flex items-center bg-gray-50 px-4 py-3 rounded-xl">
+                        <svg class="h-5 w-5 mr-3 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
+                        </svg>
+                        <span class="text-gray-700">Floor {{ $room->floor_number }}</span>
+                    </div>
+                    <div class="flex items-center bg-gray-50 px-4 py-3 rounded-xl">
+                        <svg class="h-5 w-5 mr-3 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
+                        </svg>
+                        <span class="text-gray-700">Up to {{ $room->max_guests }} guests</span>
+                    </div>
+                </div>
+
+                <div class="flex items-baseline">
+                    <span class="text-3xl font-bold text-blue-600">${{ number_format($room->price_per_night) }}</span>
+                    <span class="text-gray-600 ml-2">/night</span>
                 </div>
             </div>
         </div>

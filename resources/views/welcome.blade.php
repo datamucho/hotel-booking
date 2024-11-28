@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Welcome to LuxStay')
+@section('title', 'Welcome to Harbour')
 
 @section('content')
     <!-- Hero Section with Image Background -->
@@ -73,7 +73,7 @@
     <div class="py-24 bg-white">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-16">
-                <h2 class="text-3xl font-bold text-gray-900">Why Choose LuxStay</h2>
+                <h2 class="text-3xl font-bold text-gray-900">Why Choose Harbour</h2>
                 <p class="mt-4 text-xl text-gray-600">Experience the perfect blend of luxury and comfort</p>
             </div>
 
@@ -123,41 +123,26 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <h2 class="text-3xl font-bold text-gray-900 mb-12">Popular Rooms</h2>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <div class="bg-white rounded-2xl shadow-lg overflow-hidden transform transition-all duration-300 hover:scale-[1.02]">
-                    <img src="https://images.unsplash.com/photo-1590490360182-c33d57733427?ixlib=rb-4.0.3" alt="Luxury Suite" class="w-full h-64 object-cover">
-                    <div class="p-6">
-                        <h3 class="text-xl font-bold text-gray-900">Deluxe Ocean Suite</h3>
-                        <p class="mt-2 text-gray-600">Breathtaking ocean views with premium amenities</p>
-                        <div class="mt-4 flex items-center justify-between">
-                            <span class="text-2xl font-bold text-blue-600">$499/night</span>
-                            <button class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors">Book Now</button>
-                        </div>
-                    </div>
-                </div>
+                <x-room :room="[
+                    'title' => 'Deluxe Ocean Suite',
+                    'description' => 'Breathtaking ocean views with premium amenities',
+                    'price' => 499,
+                    'imageUrl' => 'https://images.unsplash.com/photo-1590490360182-c33d57733427?ixlib=rb-4.0.3'
+                ]" :isShowcase="true" />
 
-                <div class="bg-white rounded-2xl shadow-lg overflow-hidden transform transition-all duration-300 hover:scale-[1.02]">
-                    <img src="https://images.unsplash.com/photo-1578683010236-d716f9a3f461?ixlib=rb-4.0.3" alt="Presidential Suite" class="w-full h-64 object-cover">
-                    <div class="p-6">
-                        <h3 class="text-xl font-bold text-gray-900">Presidential Suite</h3>
-                        <p class="mt-2 text-gray-600">Ultimate luxury with panoramic city views</p>
-                        <div class="mt-4 flex items-center justify-between">
-                            <span class="text-2xl font-bold text-blue-600">$899/night</span>
-                            <button class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors">Book Now</button>
-                        </div>
-                    </div>
-                </div>
+                <x-room :room="[
+                    'title' => 'Presidential Suite',
+                    'description' => 'Ultimate luxury with panoramic city views',
+                    'price' => 899,
+                    'imageUrl' => 'https://images.unsplash.com/photo-1578683010236-d716f9a3f461?ixlib=rb-4.0.3'
+                ]" :isShowcase="true" />
 
-                <div class="bg-white rounded-2xl shadow-lg overflow-hidden transform transition-all duration-300 hover:scale-[1.02]">
-                    <img src="https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?ixlib=rb-4.0.3" alt="Garden Villa" class="w-full h-64 object-cover">
-                    <div class="p-6">
-                        <h3 class="text-xl font-bold text-gray-900">Garden Villa</h3>
-                        <p class="mt-2 text-gray-600">Private sanctuary with exclusive garden access</p>
-                        <div class="mt-4 flex items-center justify-between">
-                            <span class="text-2xl font-bold text-blue-600">$699/night</span>
-                            <button class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors">Book Now</button>
-                        </div>
-                    </div>
-                </div>
+                <x-room :room="[
+                    'title' => 'Garden Villa',
+                    'description' => 'Private sanctuary with exclusive garden access',
+                    'price' => 699,
+                    'imageUrl' => 'https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?ixlib=rb-4.0.3'
+                ]" :isShowcase="true" />
             </div>
         </div>
     </div>

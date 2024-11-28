@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'My Bookings - LuxStay')
+@section('title', 'My Bookings - Harbour')
 
 @section('content')
 <div class="min-h-full flex flex-col">

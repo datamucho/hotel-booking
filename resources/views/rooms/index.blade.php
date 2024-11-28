@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Our Rooms - LuxStay')
+@section('title', 'Our Rooms - Harbour')
 
 @section('content')
     <!-- Hero Section -->
@@ -71,7 +71,7 @@
                     </div>
 
                     <!-- Amenities Filter -->
-                    <div class="bg-white p-6 rounded-lg shadow-sm">
+                    <!-- <div class="bg-white p-6 rounded-lg shadow-sm">
                         <h3 class="text-lg font-semibold text-gray-900 mb-4">Amenities</h3>
                         <div class="space-y-3">
                             @foreach(['ocean_view', 'balcony', 'private_pool', 'spa_bath'] as $amenity)
@@ -86,9 +86,9 @@
                                 </label>
                             @endforeach
                         </div>
-                    </div>
+                    </div> -->
 
-                    @if(request()->anyFilled(['min_price', 'max_price', 'room_types', 'amenities']))
+                    @if(request()->anyFilled(['min_price', 'max_price', 'room_types']))
                         <div class="mt-4">
                             <a href="{{ route('rooms.index') }}" 
                                class="text-blue-600 hover:text-blue-800 text-sm font-medium">
@@ -118,45 +118,9 @@
                 </div>
 
                 <!-- Room Cards Grid -->
-                <div class="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     @forelse ($rooms as $room)
-                        <div class="bg-white rounded-xl shadow-lg overflow-hidden">
-                            <div class="relative">
-                                <img src="{{ asset('images/rooms/' . $room->room_type . '.jpg') }}" 
-                                     alt="{{ $room->room_type }}" 
-                                     class="w-full h-48 object-cover"
-                                     onerror="this.src='https://images.unsplash.com/photo-1590490360182-c33d57733427?ixlib=rb-4.0.3'"
-                                >
-                                <div class="absolute top-4 right-4 {{ $room->availability_status ? 'bg-white text-blue-600' : 'bg-red-100 text-red-600' }} px-2 py-1 rounded-lg text-sm font-semibold">
-                                    {{ $room->availability_status ? 'Available' : 'Booked' }}
-                                </div>
-                            </div>
-                            <div class="p-6">
-                                <h3 class="text-xl font-bold text-gray-900">{{ ucwords(str_replace('_', ' ', $room->room_type)) }}</h3>
-                                <div class="mt-2 flex items-center text-sm text-gray-600">
-                                    <svg class="h-5 w-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
-                                    </svg>
-                                    Floor {{ $room->floor_number }}
-                                </div>
-                                <div class="mt-4 flex items-center justify-between">
-                                    <div>
-                                        <span class="text-2xl font-bold text-blue-600">${{ number_format($room->price_per_night) }}</span>
-                                        <span class="text-gray-600">/night</span>
-                                    </div>
-                                    @if($room->availability_status)
-                                        <a href="{{ route('bookings.create', $room) }}" 
-                                           class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700">
-                                            Book Now
-                                        </a>
-                                    @else
-                                        <span class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-gray-400 cursor-not-allowed">
-                                            Not Available
-                                        </span>
-                                    @endif
-                                </div>
-                            </div>
-                        </div>
+                        <x-room :room="$room" />
                     @empty
                         <div class="col-span-full text-center py-12">
                             <h3 class="text-lg font-medium text-gray-900">No rooms available at the moment</h3>
