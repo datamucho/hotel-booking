@@ -45,4 +45,19 @@
             </div>
         </div>
     </div>
+
+    @if(!$isShowcase && method_exists($room, 'amenities') && $room->amenities->isNotEmpty())
+        <div class="px-4 py-3 border-t border-gray-200">
+            <div class="flex flex-wrap gap-2">
+                @foreach($room->amenities as $amenity)
+                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                        @if($amenity->icon)
+                            <i class="{{ $amenity->icon }} mr-1"></i>
+                        @endif
+                        {{ $amenity->name }}
+                    </span>
+                @endforeach
+            </div>
+        </div>
+    @endif
 </div>

@@ -71,24 +71,29 @@
                     </div>
 
                     <!-- Amenities Filter -->
-                    <!-- <div class="bg-white p-6 rounded-lg shadow-sm">
+                    <div class="bg-white p-6 rounded-lg shadow-sm">
                         <h3 class="text-lg font-semibold text-gray-900 mb-4">Amenities</h3>
                         <div class="space-y-3">
-                            @foreach(['ocean_view', 'balcony', 'private_pool', 'spa_bath'] as $amenity)
+                            @foreach($amenities as $amenity)
                                 <label class="flex items-center">
                                     <input type="checkbox" 
                                            name="amenities[]" 
-                                           value="{{ $amenity }}"
-                                           {{ in_array($amenity, request('amenities', [])) ? 'checked' : '' }}
+                                           value="{{ $amenity->id }}"
+                                           {{ in_array($amenity->id, request('amenities', [])) ? 'checked' : '' }}
                                            class="rounded text-blue-600 focus:ring-blue-500"
                                            onchange="this.form.submit()">
-                                    <span class="ml-2 text-gray-700">{{ ucwords(str_replace('_', ' ', $amenity)) }}</span>
+                                    <span class="ml-2 text-gray-700">
+                                        @if($amenity->icon)
+                                            <i class="{{ $amenity->icon }} mr-1"></i>
+                                        @endif
+                                        {{ $amenity->name }}
+                                    </span>
                                 </label>
                             @endforeach
                         </div>
-                    </div> -->
+                    </div>
 
-                    @if(request()->anyFilled(['min_price', 'max_price', 'room_types']))
+                    @if(request()->anyFilled(['min_price', 'max_price', 'room_types', 'amenities']))
                         <div class="mt-4">
                             <a href="{{ route('rooms.index') }}" 
                                class="text-blue-600 hover:text-blue-800 text-sm font-medium">

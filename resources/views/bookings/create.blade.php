@@ -37,6 +37,22 @@
                     <span class="text-3xl font-bold text-blue-600">${{ number_format($room->price_per_night) }}</span>
                     <span class="text-gray-600 ml-2">/night</span>
                 </div>
+
+                @if($room->amenities->isNotEmpty())
+                    <div class="mt-6">
+                        <h3 class="text-lg font-semibold text-gray-900 mb-3">Room Amenities</h3>
+                        <div class="grid grid-cols-2 gap-3">
+                            @foreach($room->amenities as $amenity)
+                                <div class="flex items-center bg-gray-50 px-4 py-3 rounded-xl">
+                                    @if($amenity->icon)
+                                        <i class="{{ $amenity->icon }} text-blue-600 mr-3"></i>
+                                    @endif
+                                    <span class="text-gray-700">{{ $amenity->name }}</span>
+                                </div>
+                            @endforeach
+                        </div>
+                    </div>
+                @endif
             </div>
         </div>
 

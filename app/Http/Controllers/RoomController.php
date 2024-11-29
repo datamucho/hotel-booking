@@ -3,12 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Models\Room;
+use App\Models\Amenity;
 use Illuminate\Http\Request;
 
 class RoomController extends Controller
 {
     public function index(Request $request)
     {
+        $amenities = Amenity::all();
         $query = Room::query();
 
         // Apply price filter
@@ -26,9 +28,9 @@ class RoomController extends Controller
 
         // Apply amenities filter
         if ($request->amenities) {
-            foreach ($request->amenities as $amenity) {
-                $query->where($amenity, true);
-            }
+            $query->whereHas('amenities', function($q) use ($request) {
+                $q->whereIn('amenities.id', $request->amenities);
+            });
         }
 
         // Apply sorting
@@ -48,7 +50,7 @@ class RoomController extends Controller
         // Get unique room types for filter
         $roomTypes = Room::distinct()->pluck('room_type');
         
-        return view('rooms.index', compact('rooms', 'roomTypes'));
+        return view('rooms.index', compact('rooms', 'roomTypes', 'amenities'));
     }
 
     public function show(Room $room)
